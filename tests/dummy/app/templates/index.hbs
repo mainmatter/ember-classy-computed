@@ -1,0 +1,16 @@
+<h1>Users</h1>
+
+<h3>{{#link-to (query-params filter='isActive')}}Active Users{{/link-to}}</h3>
+<h3>{{#link-to (query-params filter='isAdmin')}}Admin Users{{/link-to}}</h3>
+<h3>{{#link-to (query-params filter='isBlocked')}}Blocked Users{{/link-to}}</h3>
+
+<ul>
+  {{#each filteredUsers as |user|}}
+    <li>
+      {{user.shoutedName}}
+      Is Active: <input type="checkbox" onclick={{action 'toggle' user 'isActive'}} checked={{user.isActive}}>
+      Is Admin: <input type="checkbox" onclick={{action 'toggle' user 'isAdmin'}} checked={{user.isAdmin}}>
+      Is Blocked: <input type="checkbox" onclick={{action 'toggle' user 'isBlocked'}} checked={{user.isBlocked}}>
+    </li>
+  {{/each}}
+</ul>
