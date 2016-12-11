@@ -6,12 +6,12 @@ module('Macaron');
 
 test('recompute calls notifyPropertyChange with the key on the context', function(assert) {
   let macaron = Macaron.create({
-    context: {
+    _context: {
       notifyPropertyChange() {
         assert.ok(true);
       }
     },
-    key: 'someProperty'
+    _key: 'someProperty'
   });
 
   macaron.recompute();

@@ -3,18 +3,32 @@ import { module } from 'qunit';
 import { test } from 'ember-qunit';
 import { Macaron, wrap } from 'ember-macarons';
 
-const { Object: EmberObject } = Ember;
+const { Object: EmberObject, observer, computed: { filter }, defineProperty, A } = Ember;
 
 const TestMacaron = Macaron.extend({
-  compute(a, b) {
-    return `${a} ${b}`;
+  contentDidChange: observer('content', function() {
+    this.recompute();
+  }),
+
+  filterPropertyDidChange: observer('filterProperty', function() {
+    let filterProperty = this.get('filterProperty');
+    let property = filter(`collection.@each.${filterProperty}`, (item) => item.get(filterProperty));
+    defineProperty(this, 'content', property);
+  }),
+
+  compute(collection, filterProperty) {
+    this.set('collection', collection);
+    this.set('filterProperty', filterProperty);
+
+    return this.get('content');
   }
 });
 
 const macro = wrap(TestMacaron);
 
 const TestClass = EmberObject.extend({
-  prop: macro('a', 'b')
+  filterBy: 'isActive',
+  filteredUsers: macro('users', 'filterBy')
 });
 
 let testObject;
@@ -22,48 +36,41 @@ let testObject;
 module('wrap', {
   beforeEach() {
     testObject = TestClass.create({
-      a: 'value a',
-      b: 'value b'
+      users: A([
+        EmberObject.create({ name: 'a', isActive: true, isAdmin: false }),
+        EmberObject.create({ name: 'b', isActive: false, isAdmin: true })
+      ])
     });
   }
 });
 
 test('wrap returns a computed property macro', function(assert) {
-  assert.ok(testObject.prop instanceof Ember.ComputedProperty);
+  assert.ok(wrap(TestMacaron)() instanceof Ember.ComputedProperty);
 });
 
-test("the computed property calls the macaron's function with the values of the respective attributes", function(assert) {
-  assert.equal(testObject.get('prop'), 'value a value b');
+test("the computed returns the result of the macaron's computed method", function(assert) {
+  assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), ['a']);
 });
 
-test('the computed property updates correctly', function(assert) {
-  assert.equal(testObject.get('prop'), 'value a value b');
+test('the macaron can recompute on changes of dependencies not listed in the dependent keys', function(assert) {
+  testObject.get('users').objectAt(0).set('isActive', false);
 
-  testObject.set('a', 'value c');
-
-  assert.equal(testObject.get('prop'), 'value c value b');
-
-  testObject.set('b', 'value d');
-
-  assert.equal(testObject.get('prop'), 'value c value d');
+  assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), []);
 });
 
-test("the computed property sets the macaron's context and key attributes", function(assert) {
-  let otherTestObject;
-  let OtherTestMacaron = Macaron.extend({
-    setProperties(props) {
-      assert.equal(props.key, 'prop');
-      assert.deepEqual(props.context, otherTestObject);
-    },
-    compute() {}
+test('it keeps the computed property separate for separate instances', function(assert) {
+  let otherTestObject = TestClass.create({
+    users: A([
+      EmberObject.create({ name: 'c', isActive: true, isAdmin: false }),
+      EmberObject.create({ name: 'd', isActive: false, isAdmin: true })
+    ]),
   });
 
-  let otherMacro = wrap(OtherTestMacaron);
+  assert.deepEqual(otherTestObject.get('filteredUsers').mapBy('name'), ['c']);
+  assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), ['a']);
 
-  let OtherTestClass = EmberObject.extend({
-    prop: otherMacro()
-  });
+  otherTestObject.get('users').objectAt(0).set('isActive', false);
 
-  otherTestObject = OtherTestClass.create();
-  otherTestObject.get('prop');
+  assert.deepEqual(otherTestObject.get('filteredUsers').mapBy('name'), []);
+  assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), ['a']);
 });
