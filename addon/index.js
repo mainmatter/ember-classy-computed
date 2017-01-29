@@ -25,7 +25,7 @@ function findOrCreateMacaron(klass, context, key) {
   }
 }
 
-export const ClassBasedComputedProperty = EmberObject.extend({
+const ClassBasedComputedProperty = EmberObject.extend({
   _context: null,
   _key: null,
 
@@ -34,13 +34,17 @@ export const ClassBasedComputedProperty = EmberObject.extend({
   },
 });
 
-export function wrap(klass) {
-  return function(...dependencies) {
-    return computed(...dependencies, function(key) {
-      let macaron = findOrCreateMacaron(klass, this, key);
+ClassBasedComputedProperty.reopenClass({
+  property(klass) {
+    return function(...dependencies) {
+      return computed(...dependencies, function(key) {
+        let macaron = findOrCreateMacaron(klass, this, key);
 
-      let values = A(dependencies).map((dep) => this.get(dep));
-      return macaron.compute(...values);
-    });
-  };
-}
+        let values = A(dependencies).map((dep) => this.get(dep));
+        return macaron.compute(...values);
+      });
+    };
+  }
+});
+
+export default ClassBasedComputedProperty;

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { ClassBasedComputedProperty, wrap } from 'ember-class-based-cps';
+import ClassBasedComputedProperty from 'ember-class-based-cps';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 
@@ -22,4 +22,4 @@ const DynamicFilterByComputed = ClassBasedComputedProperty.extend({
   }
 });
 
-export default wrap(DynamicFilterByComputed);
+export default ClassBasedComputedProperty.property(DynamicFilterByComputed);

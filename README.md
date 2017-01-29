@@ -52,7 +52,7 @@ The logic for the `filterByProperty` macro is encapsulated in a class then:
 ```js
 // app/computeds/filter-by.js
 import Ember from 'ember';
-import { ClassBasedComputedProperty, wrap } from 'ember-class-based-cps';
+import { ClassBasedComputedProperty } from 'ember-class-based-cps';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 
@@ -77,7 +77,7 @@ const DynamicFilterByComputed = ClassBasedComputedProperty.extend({
   }
 });
 
-export default wrap(DynamicFilterByComputed);
+export default ClassBasedComputedProperty.property(DynamicFilterByComputed);
 ```
 
 Here the computed property's logic is __completely self-contained__ in the
