@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { Macaron, wrap } from 'ember-macarons';
+import { Macaron, wrap } from 'ember-class-based-cps';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 

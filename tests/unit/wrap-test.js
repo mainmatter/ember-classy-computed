@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { module } from 'qunit';
 import { test } from 'ember-qunit';
-import { Macaron, wrap } from 'ember-macarons';
+import { Macaron, wrap } from 'ember-class-based-cps';
 
 const { Object: EmberObject, observer, computed: { filter }, defineProperty, A } = Ember;
 

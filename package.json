@@ -1,5 +1,5 @@
 {
-  "name": "ember-macarons",
+  "name": "ember-class-based-cps",
   "version": "0.0.0",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {

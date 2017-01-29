@@ -1,6 +1,6 @@
 import { module } from 'qunit';
 import { test } from 'ember-qunit';
-import { Macaron } from 'ember-macarons';
+import { Macaron } from 'ember-class-based-cps';
 
 module('Macaron');
 

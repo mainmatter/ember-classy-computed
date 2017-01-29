@@ -2,5 +2,5 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-macarons'
+  name: 'ember-class-based-cps'
 };

@@ -1,7 +1,7 @@
-# ember-macarons
+# ember-class-based-cps
 
-ember-macarons enables __class based computed property macros__ which can for
-example be used to support dynamic dependent keys.
+ember-class-based-cps enables __class based computed property macros__ which
+can for example be used to support dynamic dependent keys.
 
 ## Use Case
 
@@ -33,7 +33,7 @@ when any of these user's properties change. There is also no way to express the
 fact that `activeUsers` depends on `users.@each.isActive` when `filter` is
 `'isActive'` and on `users.@each.isAdmin` when `filter` is `'isAdmin'`.
 
-ember-macarons makes defining a __computed property macro with dynamic
+ember-class-based-cps makes defining a __computed property macro with dynamic
 dependent keys__ easy be providing a class that the property's logic is
 encapsulated in and that can observe the `filter` property and redefine the
 computed property with the correct dependent keys when it changes: What this
@@ -52,7 +52,7 @@ The logic for the `filterByProperty` macro is encapsulated in a class then:
 ```js
 // app/computeds/filter-by.js
 import Ember from 'ember';
-import { Macaron, wrap } from 'ember-macarons';
+import { Macaron, wrap } from 'ember-class-based-cps';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 
@@ -87,10 +87,10 @@ the dynamic filter property changes.
 
 ## Installation
 
-`ember install ember-macarons`
+`ember install ember-class-based-cps`
 
 ## License
 
-ember-macarons is developed by and &copy;
+ember-class-based-cps is developed by and &copy;
 [simplabs GmbH](http://simplabs.com) and contributors. It is released under the
 [MIT License](LICENSE).
