@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { Object: EmberObject, computed, A, isNone } = Ember;
+const { Object: EmberObject, computed, A, isNone, getOwner } = Ember;
 
 const PROPERTIES = new WeakMap();
 
@@ -15,7 +15,8 @@ function findOrCreatePropertyInstance(propertyClass, context, key) {
   if (property = propertiesForContext[key]) {
     return property;
   } else {
-    property = propertyClass.create({
+    let owner = getOwner(context);
+    property = propertyClass.create(owner.ownerInjection(), {
       _key: key,
       _context: context
     });

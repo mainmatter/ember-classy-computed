@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import filterBy from '../computeds/filter-by';
 import shout from '../computeds/shout';
+import serviceBased from '../computeds/service-based';
 
 const { A, Object: EmberObject } = Ember;
 
-function createPerso(name, isActive, isAdmin, isBlocked) {
+function createPerson(name, isActive, isAdmin, isBlocked) {
   return EmberObject.extend({
     shoutedName: shout('name')
   }).create({
@@ -20,12 +21,14 @@ export default Ember.Controller.extend({
   filter: 'isActive',
 
   users: A([
-    createPerso('Peter', true, true, false),
-    createPerso('Paul', true, false, false),
-    createPerso('Mary', false, false, true)
+    createPerson('Peter', true, true, false),
+    createPerson('Paul', true, false, false),
+    createPerson('Mary', false, false, true)
   ]),
 
   filteredUsers: filterBy('users', 'filter'),
+
+  serviceState: serviceBased(),
 
   actions: {
     toggle(user, property) {

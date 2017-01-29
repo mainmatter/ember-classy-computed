@@ -1,7 +1,21 @@
 # ember-class-based-cps
 
-ember-class-based-cps enables __class based computed property macros__ which
-can for example be used to support dynamic dependent keys.
+ember-class-based-cps introduce a mechanism for __class based computed
+properties__ which essentially enables keeping state in computed properties
+(as opposed to normal computed properties which are stateless).
+
+Keeping that state *inside* of the computed property instead of in the instance
+of the class it is defined on enables new kinds of computed property macros
+that are currently hard to implement:
+
+* computed property macros can use services without having to inject the
+  service into the class they are defined on
+* computed property macros with dynamic dependent keys
+* computed property macros that depend on external invalidation triggers
+  other than those expressible as dependent keys, e.g. events
+
+Class based computed properties are essentially equivalent to
+[class based helpers](http://guides.emberjs.com/v2.11.0/templates/writing-helpers/#toc_class-based-helpers).
 
 ## Use Case
 
