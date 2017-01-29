@@ -45,7 +45,7 @@ module('ClassBasedComputedProperty', {
 });
 
 test('invalidate calls notifyPropertyChange with the key on the context', function(assert) {
-  let macaron = ClassBasedComputedProperty.create({
+  let property = ClassBasedComputedProperty.create({
     _context: {
       notifyPropertyChange() {
         assert.ok(true);
@@ -54,24 +54,24 @@ test('invalidate calls notifyPropertyChange with the key on the context', functi
     _key: 'someProperty'
   });
 
-  macaron.invalidate();
+  property.invalidate();
 });
 
 test('ClassBasedComputedProperty.property returns a computed property macro', function(assert) {
   assert.ok(ClassBasedComputedProperty.property(TestProperty)() instanceof Ember.ComputedProperty);
 });
 
-test("the computed returns the result of the macaron's computed method", function(assert) {
+test("the computed property returns the result of the class based property instance's computed method", function(assert) {
   assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), ['a']);
 });
 
-test('the macaron can invalidate itself on changes of dependencies not listed in the dependent keys', function(assert) {
+test('the class based property instance can invalidate itself on changes of dependencies not listed in the dependent keys', function(assert) {
   testObject.get('users').objectAt(0).set('isActive', false);
 
   assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), []);
 });
 
-test('it keeps the computed property separate for separate instances', function(assert) {
+test('it keeps separate class based property instances separate properties on the context', function(assert) {
   let otherTestObject = TestClass.create({
     users: A([
       EmberObject.create({ name: 'c', isActive: true, isAdmin: false }),

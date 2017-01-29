@@ -2,26 +2,26 @@ import Ember from 'ember';
 
 const { Object: EmberObject, computed, A, isNone } = Ember;
 
-const MACROS = new WeakMap();
+const PROPERTIES = new WeakMap();
 
-function findOrCreateMacaron(klass, context, key) {
-  let klassMacarons = MACROS.get(context);
-  if (isNone(klassMacarons)) {
-    klassMacarons = {};
-    MACROS.set(context, klassMacarons);
+function findOrCreatePropertyInstance(propertyClass, context, key) {
+  let propertiesForContext = PROPERTIES.get(context);
+  if (isNone(propertiesForContext)) {
+    propertiesForContext = {};
+    PROPERTIES.set(context, propertiesForContext);
   }
 
-  let macaron;
-  if (macaron = klassMacarons[key]) {
-    return macaron;
+  let property;
+  if (property = propertiesForContext[key]) {
+    return property;
   } else {
-    macaron = klass.create({
+    property = propertyClass.create({
       _key: key,
       _context: context
     });
 
-    klassMacarons[key] = macaron;
-    return macaron;
+    propertiesForContext[key] = property;
+    return property;
   }
 }
 
@@ -38,10 +38,10 @@ ClassBasedComputedProperty.reopenClass({
   property(klass) {
     return function(...dependencies) {
       return computed(...dependencies, function(key) {
-        let macaron = findOrCreateMacaron(klass, this, key);
+        let property = findOrCreatePropertyInstance(klass, this, key);
 
         let values = A(dependencies).map((dep) => this.get(dep));
-        return macaron.compute(...values);
+        return property.compute(...values);
       });
     };
   }
