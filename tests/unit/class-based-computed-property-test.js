@@ -66,7 +66,7 @@ test("the computed property returns the result of the class based property insta
 });
 
 test('the class based property instance can invalidate itself on changes of dependencies not listed in the dependent keys', function(assert) {
-  testObject.get('users').objectAt(0).set('isActive', false);
+  testObject.set('users.0.isActive', false);
 
   assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), []);
 });
@@ -82,7 +82,7 @@ test('it keeps separate class based property instances separate properties on th
   assert.deepEqual(otherTestObject.get('filteredUsers').mapBy('name'), ['c']);
   assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), ['a']);
 
-  otherTestObject.get('users').objectAt(0).set('isActive', false);
+  otherTestObject.set('users.0.isActive', false);
 
   assert.deepEqual(otherTestObject.get('filteredUsers').mapBy('name'), []);
   assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), ['a']);
