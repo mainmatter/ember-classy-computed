@@ -2,13 +2,13 @@ import Ember from 'ember';
 
 const { Object: EmberObject, computed, A, isNone } = Ember;
 
-const MACARONS = new WeakMap();
+const MACROS = new WeakMap();
 
 function findOrCreateMacaron(klass, context, key) {
-  let klassMacarons = MACARONS.get(context);
+  let klassMacarons = MACROS.get(context);
   if (isNone(klassMacarons)) {
     klassMacarons = {};
-    MACARONS.set(context, klassMacarons);
+    MACROS.set(context, klassMacarons);
   }
 
   let macaron;
@@ -25,7 +25,7 @@ function findOrCreateMacaron(klass, context, key) {
   }
 }
 
-export const Macaron = EmberObject.extend({
+export const ClassBasedComputedProperty = EmberObject.extend({
   _context: null,
   _key: null,
 

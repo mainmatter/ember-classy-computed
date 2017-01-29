@@ -1,11 +1,11 @@
 import Ember from 'ember';
 import { module } from 'qunit';
 import { test } from 'ember-qunit';
-import { Macaron, wrap } from 'ember-class-based-cps';
+import { ClassBasedComputedProperty, wrap } from 'ember-class-based-cps';
 
 const { Object: EmberObject, observer, computed: { filter }, defineProperty, A } = Ember;
 
-const TestMacaron = Macaron.extend({
+const TestProperty = ClassBasedComputedProperty.extend({
   contentDidChange: observer('content', function() {
     this.invalidate();
   }),
@@ -24,7 +24,7 @@ const TestMacaron = Macaron.extend({
   }
 });
 
-const macro = wrap(TestMacaron);
+const macro = wrap(TestProperty);
 
 const TestClass = EmberObject.extend({
   filterBy: 'isActive',
@@ -45,7 +45,7 @@ module('wrap', {
 });
 
 test('wrap returns a computed property macro', function(assert) {
-  assert.ok(wrap(TestMacaron)() instanceof Ember.ComputedProperty);
+  assert.ok(wrap(TestProperty)() instanceof Ember.ComputedProperty);
 });
 
 test("the computed returns the result of the macaron's computed method", function(assert) {

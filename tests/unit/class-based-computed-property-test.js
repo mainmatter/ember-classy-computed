@@ -1,11 +1,11 @@
 import { module } from 'qunit';
 import { test } from 'ember-qunit';
-import { Macaron } from 'ember-class-based-cps';
+import { ClassBasedComputedProperty } from 'ember-class-based-cps';
 
-module('Macaron');
+module('ClassBasedComputedProperty');
 
 test('invalidate calls notifyPropertyChange with the key on the context', function(assert) {
-  let macaron = Macaron.create({
+  let macaron = ClassBasedComputedProperty.create({
     _context: {
       notifyPropertyChange() {
         assert.ok(true);

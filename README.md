@@ -52,15 +52,15 @@ The logic for the `filterByProperty` macro is encapsulated in a class then:
 ```js
 // app/computeds/filter-by.js
 import Ember from 'ember';
-import { Macaron, wrap } from 'ember-class-based-cps';
+import { ClassBasedComputedProperty, wrap } from 'ember-class-based-cps';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 
-const DynamicFilterByComputed = Macaron.extend({
+const DynamicFilterByComputed = ClassBasedComputedProperty.extend({
   contentDidChange: observer('content', function() {
-    this.invalidate(); // This method is provided by the Macaron base class and
-                       // invalidates the computed property so that it will get
-                       // recomputed on the next access.
+    this.invalidate(); // This method is provided by the ClassBasedComputedProperty
+                       // base class and invalidates the computed property so that
+                       // it will get recomputed on the next access.
   }),
 
   filterPropertyDidChange: observer('filterProperty', function() {

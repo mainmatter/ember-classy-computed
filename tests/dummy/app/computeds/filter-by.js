@@ -1,9 +1,9 @@
 import Ember from 'ember';
-import { Macaron, wrap } from 'ember-class-based-cps';
+import { ClassBasedComputedProperty, wrap } from 'ember-class-based-cps';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 
-const DynamicFilterByComputed = Macaron.extend({
+const DynamicFilterByComputed = ClassBasedComputedProperty.extend({
   contentDidChange: observer('content', function() {
     this.invalidate();
   }),
