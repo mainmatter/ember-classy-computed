@@ -58,9 +58,9 @@ const { observer, computed: { filter }, defineProperty } = Ember;
 
 const DynamicFilterByComputed = Macaron.extend({
   contentDidChange: observer('content', function() {
-    this.recompute(); // This method is provided by the Macaron base class and
-                      // invalidates the computed property so that it will get
-                      // recomputed on the next access.
+    this.invalidate(); // This method is provided by the Macaron base class and
+                       // invalidates the computed property so that it will get
+                       // recomputed on the next access.
   }),
 
   filterPropertyDidChange: observer('filterProperty', function() {

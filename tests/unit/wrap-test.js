@@ -7,7 +7,7 @@ const { Object: EmberObject, observer, computed: { filter }, defineProperty, A }
 
 const TestMacaron = Macaron.extend({
   contentDidChange: observer('content', function() {
-    this.recompute();
+    this.invalidate();
   }),
 
   filterPropertyDidChange: observer('filterProperty', function() {
@@ -52,7 +52,7 @@ test("the computed returns the result of the macaron's computed method", functio
   assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), ['a']);
 });
 
-test('the macaron can recompute on changes of dependencies not listed in the dependent keys', function(assert) {
+test('the macaron can invalidate itself on changes of dependencies not listed in the dependent keys', function(assert) {
   testObject.get('users').objectAt(0).set('isActive', false);
 
   assert.deepEqual(testObject.get('filteredUsers').mapBy('name'), []);

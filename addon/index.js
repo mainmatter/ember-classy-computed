@@ -29,7 +29,7 @@ export const Macaron = EmberObject.extend({
   _context: null,
   _key: null,
 
-  recompute() {
+  invalidate() {
     this._context.notifyPropertyChange(this._key);
   },
 });

@@ -4,7 +4,7 @@ import { Macaron } from 'ember-macarons';
 
 module('Macaron');
 
-test('recompute calls notifyPropertyChange with the key on the context', function(assert) {
+test('invalidate calls notifyPropertyChange with the key on the context', function(assert) {
   let macaron = Macaron.create({
     _context: {
       notifyPropertyChange() {
@@ -14,5 +14,5 @@ test('recompute calls notifyPropertyChange with the key on the context', functio
     _key: 'someProperty'
   });
 
-  macaron.recompute();
+  macaron.invalidate();
 });
