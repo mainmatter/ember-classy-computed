@@ -19,7 +19,11 @@ Class based computed properties are essentially equivalent to
 
 ## Use Case
 
-Filtering a collection by an attribute is easy:
+An example use case for a class based computed property is a macro that creates
+a computed property with dynamic dependent keys that cannot be know upfront.
+
+Defining a computed property that filters a collection property by the value of
+an attribute of each element is as easy as
 
 ```js
 activeUsers: Ember.computed('users.@each.isActive', function() {
@@ -27,9 +31,10 @@ activeUsers: Ember.computed('users.@each.isActive', function() {
 })
 ```
 
-This will filter the `users` collection by the `isActive` attribute so that
-`activeUsers` only returns users for which that attribute is `true`. This
-computed property depends on each user's `isActive` property obviously.
+This will filter the `users` collection by the `isActive` attribute of each
+user so that `activeUsers` only includes users for which that attribute is
+`true`. This computed property depends on each user's `isActive` property
+obviously.
 
 __What if the property that the users are to be filtered by might change
 though?__ In that case you might write sth. like this:
@@ -42,16 +47,22 @@ activeUsers: Ember.computed('filter', function() {
 
 This now filter the `users` by whatever property name is returned by `filter`.
 The problem with this is that the `activeUsers` property does not depend on any
-of the individual user's properties anymore so that it would not get recomputed
+of the individual user's properties anymore so that it would not be recomputed
 when any of these user's properties change. There is also no way to express the
 fact that `activeUsers` depends on `users.@each.isActive` when `filter` is
 `'isActive'` and on `users.@each.isAdmin` when `filter` is `'isAdmin'`.
 
-ember-class-based-cps makes defining a __computed property macro with dynamic
-dependent keys__ easy be providing a class that the property's logic is
-encapsulated in and that can observe the `filter` property and redefine the
-computed property with the correct dependent keys when it changes: What this
-allows is sth. like this:
+Typicall this case would be solved by defining an observer on the context
+object's `filter` property and whenever that changes redefining the
+`activeUsers` computed property with the correct dependent keys for the current
+value of `filter` (an alternative solution would be to override the `filter`
+property's `set` method and redefine `activeUsers` there).
+
+That would make it impossible to reuse the implementation though (except in a
+mixin which leads to other problems though). ember-class-based-cps' mechanism
+for class based computed properties makes it possible to reuse that
+implementation- by providing a context for the computed property itself that
+the observer etc. can be defined on. This allows something like:
 
 ```js
 import filterByProperty from 'app/computeds/filter-by';
@@ -61,7 +72,8 @@ import filterByProperty from 'app/computeds/filter-by';
 activeUsers: filterByProperty('users' 'filter')
 ```
 
-The logic for the `filterByProperty` macro is encapsulated in a class then:
+The logic for the `filterByProperty` macro is encapsulated in the
+`DynamicFilterByComputed` class:
 
 ```js
 // app/computeds/filter-by.js
@@ -83,6 +95,9 @@ const DynamicFilterByComputed = ClassBasedComputedProperty.extend({
     defineProperty(this, 'content', property);
   }),
 
+  // This method is called whenever the computed property on the context object
+  // must be recomputed. The same lazy recomputation behavior as for regular computed
+  // properties applies here of course.
   compute(collection, filterProperty) {
     this.set('collection', collection);
     this.set('filterProperty', filterProperty);
@@ -96,7 +111,7 @@ export default ClassBasedComputedProperty.property(DynamicFilterByComputed);
 
 Here the computed property's logic is __completely self-contained__ in the
 `DynamicFilterByComputed` class so that it can easily be used via the
-`filterByProperty` while still ensuring correct dependent keys even when
+`filterByProperty` macro while still ensuring correct dependent keys even when
 the dynamic filter property changes.
 
 ## Installation
