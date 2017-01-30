@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import WeakMap from 'ember-weakmap';
 
 const { Object: EmberObject, computed, A, isNone, getOwner } = Ember;
 
