@@ -1,6 +1,6 @@
-# ember-class-based-cps
+# ember-classy-computeds
 
-ember-class-based-cps introduce a mechanism for __class based computed
+ember-classy-computeds introduce a mechanism for __class based computed
 properties__ which essentially enables keeping state in computed properties
 (as opposed to normal computed properties which are stateless).
 
@@ -59,7 +59,7 @@ value of `filter` (an alternative solution would be to override the `filter`
 property's `set` method and redefine `activeUsers` there).
 
 That would make it impossible to reuse the implementation though (except in a
-mixin which leads to other problems though). ember-class-based-cps' mechanism
+mixin which leads to other problems though). ember-classy-computeds' mechanism
 for class based computed properties makes it possible to reuse that
 implementation- by providing a context for the computed property itself that
 the observer etc. can be defined on. This allows something like:
@@ -78,7 +78,7 @@ The logic for the `filterByProperty` macro is encapsulated in the
 ```js
 // app/computeds/filter-by.js
 import Ember from 'ember';
-import { ClassBasedComputedProperty } from 'ember-class-based-cps';
+import { ClassBasedComputedProperty } from 'ember-classy-computeds';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 
@@ -116,10 +116,10 @@ the dynamic filter property changes.
 
 ## Installation
 
-`ember install ember-class-based-cps`
+`ember install ember-classy-computeds`
 
 ## License
 
-ember-class-based-cps is developed by and &copy;
+ember-classy-computeds is developed by and &copy;
 [simplabs GmbH](http://simplabs.com) and contributors. It is released under the
 [MIT License](LICENSE).

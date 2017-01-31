@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { moduleFor, test } from 'ember-qunit';
-import ClassBasedComputedProperty from 'ember-class-based-cps';
+import ClassBasedComputedProperty from 'ember-classy-computeds';
 
 const { getOwner } = Ember;
 
