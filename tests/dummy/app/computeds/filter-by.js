@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ClassBasedComputedProperty from 'ember-class-based-cps';
+import ClassBasedComputedProperty from 'ember-classy-computeds';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 

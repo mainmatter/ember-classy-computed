@@ -1,5 +1,5 @@
 {
-  "name": "ember-class-based-cps",
+  "name": "ember-classy-computeds",
   "version": "0.0.0",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
