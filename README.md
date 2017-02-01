@@ -26,13 +26,13 @@ Defining a computed property that filters a collection property by the value of
 an attribute of each element is as easy as
 
 ```js
-activeUsers: Ember.computed('users.@each.isActive', function() {
+filteredUsers: Ember.computed('users.@each.isActive', function() {
   return users.filterBy('isActive')
 })
 ```
 
 This will filter the `users` collection by the `isActive` attribute of each
-user so that `activeUsers` only includes users for which that attribute is
+user so that `filteredUsers` only includes users for which that attribute is
 `true`. This computed property depends on each user's `isActive` property
 obviously.
 
@@ -40,23 +40,23 @@ __What if the property that the users are to be filtered by might change
 though?__ In that case you might write sth. like this:
 
 ```js
-activeUsers: Ember.computed('filter', function() {
+filteredUsers: Ember.computed('filter', function() {
   return users.filterBy(this.get('filter'))
 })
 ```
 
 This now filter the `users` by whatever property name is returned by `filter`.
-The problem with this is that the `activeUsers` property does not depend on any
+The problem with this is that the `filteredUsers` property does not depend on any
 of the individual user's properties anymore so that it would not be recomputed
 when any of these user's properties change. There is also no way to express the
-fact that `activeUsers` depends on `users.@each.isActive` when `filter` is
+fact that `filteredUsers` depends on `users.@each.isActive` when `filter` is
 `'isActive'` and on `users.@each.isAdmin` when `filter` is `'isAdmin'`.
 
 Typicall this case would be solved by defining an observer on the context
 object's `filter` property and whenever that changes redefining the
-`activeUsers` computed property with the correct dependent keys for the current
+`filteredUsers` computed property with the correct dependent keys for the current
 value of `filter` (an alternative solution would be to override the `filter`
-property's `set` method and redefine `activeUsers` there).
+property's `set` method and redefine `filteredUsers` there).
 
 That would make it impossible to reuse the implementation though (except in a
 mixin which leads to other problems though). ember-classy-computeds' mechanism
@@ -69,7 +69,7 @@ import filterByProperty from 'app/computeds/filter-by';
 
 …
 
-activeUsers: filterByProperty('users' 'filter')
+filteredUsers: filterByProperty('users' 'filter')
 ```
 
 The logic for the `filterByProperty` macro is encapsulated in the
