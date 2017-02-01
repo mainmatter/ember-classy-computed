@@ -50,7 +50,7 @@ test('class based property instances are created lazily', function(assert) {
   let testContext = TestClass.create(owner.ownerInjection());
 
   assert.equal(instances, 0, 'There is no instance of the computed property class when no property its used for has been accessed.');
-  
+
   testContext.get('computedProperty');
 
   assert.equal(instances, 1, 'There is an instance of the computed property class when a property its used for has been accessed.');
@@ -79,7 +79,7 @@ test('it uses separate class based property instances for properties on separate
   let testContextA = TestClass.create(owner.ownerInjection());
   let testContextB = TestClass.create(owner.ownerInjection());
 
-  
+
   testContextA.get('computedProperty');
   testContextB.get('computedProperty');
 
