@@ -12,19 +12,19 @@ function findOrCreatePropertyInstance(propertyClass, context, key) {
     PROPERTIES.set(context, propertiesForContext);
   }
 
-  let property;
-  if (property = propertiesForContext[key]) {
-    return property;
-  } else {
-    let owner = getOwner(context);
-    property = propertyClass.create(owner.ownerInjection(), {
-      _key: key,
-      _context: context
-    });
-
-    propertiesForContext[key] = property;
+  let property = propertiesForContext[key];
+  if (property) {
     return property;
   }
+
+  let owner = getOwner(context);
+  property = propertyClass.create(owner.ownerInjection(), {
+    _key: key,
+    _context: context
+  });
+
+  propertiesForContext[key] = property;
+  return property;
 }
 
 const ClassBasedComputedProperty = EmberObject.extend({
