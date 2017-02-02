@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ClassBasedComputedProperty from 'ember-classy-computeds';
+import ClassBasedComputedProperty from 'ember-classy-computed';
 
 const { inject: { service }, observer } = Ember;
 
