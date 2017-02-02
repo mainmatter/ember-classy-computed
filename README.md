@@ -27,7 +27,7 @@ an attribute of each element is as easy as
 
 ```js
 filteredUsers: Ember.computed('users.@each.isActive', function() {
-  return users.filterBy('isActive')
+  return this.get('users').filterBy('isActive')
 })
 ```
 
@@ -40,8 +40,8 @@ __What if the property that the users are to be filtered by might change
 though?__ In that case you might write sth. like this:
 
 ```js
-filteredUsers: Ember.computed('filter', function() {
-  return users.filterBy(this.get('filter'))
+filteredUsers: Ember.computed('users', 'filter', function() {
+  return this.get('users').filterBy(this.get('filter'))
 })
 ```
 
