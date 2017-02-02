@@ -78,7 +78,7 @@ The logic for the `filterByProperty` macro is encapsulated in the
 ```js
 // app/computeds/filter-by.js
 import Ember from 'ember';
-import { ClassBasedComputedProperty } from 'ember-classy-computed';
+import ClassBasedComputedProperty from 'ember-classy-computed';
 
 const { observer, computed: { filter }, defineProperty } = Ember;
 
