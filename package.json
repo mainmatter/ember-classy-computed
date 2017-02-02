@@ -1,7 +1,7 @@
 {
   "name": "ember-classy-computed",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "An Ember addon for Class based Computed Properties",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -12,12 +12,12 @@
     "test": "ember try:each",
     "lint": "eslint app addon blueprints config server test-support tests *.js"
   },
-  "repository": "",
+  "repository": "https://github.com/simplabs/ember-classy-computed",
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
   "license": "MIT",
+  "author": "simplabs GmbH",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
     "ember-ajax": "^2.0.1",
