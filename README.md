@@ -52,7 +52,7 @@ when any of these user's properties change. There is also no way to express the
 fact that `filteredUsers` depends on `users.@each.isActive` when `filter` is
 `'isActive'` and on `users.@each.isAdmin` when `filter` is `'isAdmin'`.
 
-Typicall this case would be solved by defining an observer on the context
+Typically this case would be solved by defining an observer on the context
 object's `filter` property and whenever that changes redefining the
 `filteredUsers` computed property with the correct dependent keys for the current
 value of `filter` (an alternative solution would be to override the `filter`
