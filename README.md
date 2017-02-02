@@ -87,9 +87,11 @@ const DynamicFilterByComputed = ClassBasedComputedProperty.extend({
     let filterProperty = this.get('filterProperty');
     let property = filter(`collection.@each.${filterProperty}`, (item) => item.get(filterProperty));
     defineProperty(this, 'content', property);
-    this.invalidate(); // This method is provided by the ClassBasedComputedProperty
-                       // base class and invalidates the computed property so that
-                       // it will get recomputed on the next access.
+
+    // This method is provided by the ClassBasedComputedProperty
+    // base class and invalidates the computed property so that
+    // it will get recomputed on the next access.
+    this.invalidate();
   }),
 
   // This method is called whenever the computed property on the context object
