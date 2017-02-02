@@ -69,7 +69,7 @@ import filterByProperty from 'app/computeds/filter-by';
 
 …
 
-filteredUsers: filterByProperty('users' 'filter')
+filteredUsers: filterByProperty('users', 'filter')
 ```
 
 The logic for the `filterByProperty` macro is encapsulated in the
