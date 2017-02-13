@@ -31,6 +31,9 @@ test('the class based property instance can invalidate itself on changes of depe
       Ember.Object.create({ name: 'Paul', isActive: false })
     ]
   });
+
+  assert.deepEqual(controller.get('filteredUsers').mapBy('name'), ['Peter']);
+
   controller.set('users.1.isActive', true);
 
   assert.deepEqual(controller.get('filteredUsers').mapBy('name'), ['Peter', 'Paul']);
