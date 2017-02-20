@@ -1,0 +1,49 @@
+<h1>Benchmarks</h1>
+
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithoutClassyComputed'}}>Trivial Property access without ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithClassyComputed'}}>Trivial Property access with ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithClassyComputed'}}>Initial Render with ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithComposableHelpers'}}>Initial Render with ember-composable-helpers</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithClassyComputed'}}>Updates with ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithComposableHelpers'}}>Updates with ember-composable-helpers</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithClassyComputed'}}>Toggle filter property with ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithComposableHelpers'}}>Toggle filter property with ember-composable-helpers</button></li>
+</ul>
+
+{{#if isRunning}}
+  {{loading-spinner}}
+{{/if}}
+
+{{#if result}}
+  <p style="color: red;">{{result}}</p>
+{{/if}}
+
+<hr/>
+
+<h2>Output</h2>
+<div class="output">
+  {{#if isClassyComputedRunning}}
+    <ul>
+      {{#each filteredUsers as |user|}}
+        <li>{{user.name}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+  
+  {{#if isComposableHelpersRunning}}
+    <ul>
+      {{#each (filter-by filter true users) as |user|}}
+        <li>{{user.name}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</div>
+
+<style type="text/css" media="screen">
+.output {
+  opacity: .5;
+  zoom: 50%;
+  border: 1px solid black;
+}
+</style>
