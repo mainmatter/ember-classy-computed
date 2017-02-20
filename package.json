@@ -43,10 +43,9 @@
     "ember-export-application-global": "^1.0.5",
     "ember-getowner-polyfill": "1.2.2",
     "ember-load-initializers": "^0.6.3",
-    "ember-resolver": "^2.0.3",
     "ember-source": "~2.11.0",
+    "ember-resolver": "^2.0.3",
     "eslint-config-simplabs": "^0.2.2",
-    "heimdalljs": "^0.3.2",
     "loader.js": "^4.0.10"
   },
   "engines": {
