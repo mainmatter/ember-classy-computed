@@ -116,6 +116,14 @@ Here the computed property's logic is __completely self-contained__ in the
 `filterByProperty` macro while still ensuring correct dependent keys even when
 the dynamic filter property changes.
 
+## Performance
+
+You might wonder whether this adds a huge performance overhead over regular
+computed properties. While this certainly introduces some overhead, our
+[benchmarks](https://github.com/simplabs/ember-classy-computed/blob/master/tests/dummy/app/components/benchmark-runner.js)
+show that for typical use cases, this overhead over functionally equivalent
+solutions is pretty much negligible.
+
 ## Installation
 
 `ember install ember-classy-computed`
