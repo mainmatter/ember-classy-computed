@@ -23,7 +23,7 @@
 
 <h2>Output</h2>
 <div class="output">
-  {{#if isClassyComputedRunning}}
+  {{#if renderClassyComputed}}
     <ul>
       {{#each filteredUsers as |user|}}
         <li>{{user.name}}</li>
@@ -31,7 +31,7 @@
     </ul>
   {{/if}}
   
-  {{#if isComposableHelpersRunning}}
+  {{#if renderComposableHelpers}}
     <ul>
       {{#each (filter-by filter true users) as |user|}}
         <li>{{user.name}}</li>

@@ -29,8 +29,6 @@ export default Ember.Component.extend(Evented, {
 
   filteredUsers: filterBy('users', 'filter'),
 
-  isRunning: or('isClassyComputedRunning', 'isComposableHelpersRunning', 'isBarebonesRunning'),
-
   _reset() {
     this.set('result', null);
     this.get('users').clear();
@@ -71,143 +69,125 @@ export default Ember.Component.extend(Evented, {
     }
   },
 
-  _runBenchmark(flag, runner) {
+  _runBenchmark(name, prepare, run) {
     this._reset();
-    this.set(flag, true);
+    this.set('isRunning', true);
 
     next(() => {
-      runner().then((result) => {
-        this.set('result', result);
-        this.set(flag, false);
+      prepare().then((preparation) => {
+        let start = performance.now();
+        run(preparation).then(() => {
+          let duration = performance.now() - start;
+          let result = `${name}: ${duration}`;
+
+          this.set('result', result);
+          this.setProperties({
+            isRunning: false,
+            renderClassyComputed: false,
+            renderComposableHelpers: false
+          });
+        });
       });
     });
   },
 
   actions: {
     runTrivialPropertyAccessWithoutClassyComputed() {
-      this._runBenchmark('isBarebonesRunning', () => {
+      this._runBenchmark('100000 recomputations with native CPs', () => {
         let owner = getOwner(this);
-        let user = User.create(owner.ownerInjection(), { name: 'some user' });
-
-        let start = performance.now();
+        return RSVP.resolve(User.create(owner.ownerInjection(), { name: 'some user' }));
+      }, (user) => {
         for (let i = 0; i < 100000; i++) {
           let name = Math.random().toString(36).substring(7);
           user.set('name', name);
           user.get('shoutedNameRegular');
         }
-        let end = performance.now();
-
-        return RSVP.resolve(`100000 trivial property recomputations: ${end - start} milliseconds.`);
+        return RSVP.resolve();
       });
     },
 
     runTrivialPropertyAccessWithClassyComputed() {
-      this._runBenchmark('isBarebonesRunning', () => {
+      this._runBenchmark('100000 recomputations with ember-classy-computed', () => {
         let owner = getOwner(this);
-        let user = User.create(owner.ownerInjection(), { name: 'some user' });
-
-        let start = performance.now();
+        return RSVP.resolve(User.create(owner.ownerInjection(), { name: 'some user' }));
+      }, (user) => {
         for (let i = 0; i < 100000; i++) {
           let name = Math.random().toString(36).substring(7);
           user.set('name', name);
           user.get('shoutedNameClassyComputed');
         }
-        let end = performance.now();
-
-        return RSVP.resolve(`100000 ember-classy-computed recomputations: ${end - start} milliseconds.`);
+        return RSVP.resolve();
       });
     },
 
     runInitialRenderWithClassyComputed() {
-      this._runBenchmark('isClassyComputedRunning', () => {
+      this._runBenchmark('Initial render of 1000 users with ember-classy-computed', () => {
+        this.set('renderClassyComputed', true);
         this._fillUsers(1000);
-
-        return new RSVP.Promise((resolve) => {
-          let start = performance.now();
-          next(() => {
-            let end = performance.now();
-
-            resolve(`Initial render of 1000 users with ember-classy-computed: ${end - start} milliseconds.`);
-          });
-        });
+        return RSVP.resolve();
+      }, () => {
+        return new RSVP.Promise((resolve) => next(null, resolve));
       });
     },
 
     runInitialRenderWithComposableHelpers() {
-      this._runBenchmark('isClassyComputedRunning', () => {
+      this._runBenchmark('Initial render of 1000 users with ember-composable-helpers', () => {
+        this.set('renderComposableHelpers', true);
         this._fillUsers(1000);
-
-        return new RSVP.Promise((resolve) => {
-          let start = performance.now();
-          next(() => {
-            let end = performance.now();
-
-            resolve(`Initial render of 1000 users with ember-composable-helpers: ${end - start} milliseconds.`);
-          });
-        });
+        return RSVP.resolve();
+      }, () => {
+        return new RSVP.Promise((resolve) => next(null, resolve));
       });
     },
 
     runUpdatesWithClassyComputed() {
-      this._runBenchmark('isClassyComputedRunning', () => {
+      this._runBenchmark('Random updates of 100 users with ember-classy-computed', () => {
+        this.set('renderClassyComputed', true);
         this._fillUsers(100);
-
+        return RSVP.resolve();
+      }, () => {
         return new RSVP.Promise((resolve) => {
-          let start = performance.now();
           this._updateUsers(100);
-          this.one('_done', () => {
-            let end = performance.now();
-
-            resolve(`Random updates of 100 users with ember-classy-computed: ${end - start} milliseconds.`);
-          });
+          this.one('_done', resolve);
         });
       });
     },
 
     runUpdatesWithComposableHelpers() {
-      this._runBenchmark('isComposableHelpersRunning', () => {
+      this._runBenchmark('Random updates of 100 users with ember-composable-helpers', () => {
+        this.set('renderComposableHelpers', true);
         this._fillUsers(100);
-
+        return RSVP.resolve();
+      }, () => {
         return new RSVP.Promise((resolve) => {
-          let start = performance.now();
           this._updateUsers(100);
-          this.one('_done', () => {
-            let end = performance.now();
-
-            resolve(`Random updates of 100 users with ember-composable-helpers: ${end - start} milliseconds.`);
-          });
+          this.one('_done', resolve);
         });
       });
     },
 
     runFilterPropertyToggleWithClassyComputed() {
-      this._runBenchmark('isClassyComputedRunning', () => {
+      this._runBenchmark('Observed property updates for 100 users with ember-classy-computed', () => {
+        this.set('renderClassyComputed', true);
         this._fillUsers(100);
-
+        return RSVP.resolve();
+      }, () => {
         return new RSVP.Promise((resolve) => {
-          let start = performance.now();
           this._toggleFilterProperty(100);
-          this.one('_done', () => {
-            let end = performance.now();
-
-            resolve(`Toggling filter property for 100 users with ember-classy-computed: ${end - start} milliseconds.`);
-          });
+          this.one('_done', resolve);
         });
       });
     },
 
     runFilterPropertyToggleWithComposableHelpers() {
-      this._runBenchmark('isComposableHelpersRunning', () => {
+      this._runBenchmark('Observed property updates for 100 users with ember-composable-helpers', () => {
+        this.set('renderComposableHelpers', true);
         this._fillUsers(100);
-
+        return RSVP.resolve();
+      }, () => {
         return new RSVP.Promise((resolve) => {
-          let start = performance.now();
           this._toggleFilterProperty(100);
-          this.one('_done', () => {
-            let end = performance.now();
-
-            resolve(`Toggling filter property for 100 users with ember-composable-helpers: ${end - start} milliseconds.`);
-          });
+          this.one('_done', resolve);
         });
       });
     }
