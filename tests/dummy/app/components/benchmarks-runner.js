@@ -4,7 +4,7 @@ import shout from '../computeds/shout';
 
 const {
   computed,
-  computed: { or, filter },
+  computed: { filter },
   Object: EmberObject,
   A,
   run: { next },
@@ -120,7 +120,7 @@ export default Ember.Component.extend(Evented, {
         return acc.then((duration) => {
           this.set('iteration', ++iteration);
           return curr(duration);
-        })
+        });
       }, bench(0)).then((totalDuration) => {
         let result = `${name}: ${totalDuration / ITERATIONS}`;
 
