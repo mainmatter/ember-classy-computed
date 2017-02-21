@@ -1,14 +1,27 @@
 <h1>Benchmarks</h1>
 
+<h3>Trivial Property Recomputations</h3>
 <ul>
-  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithoutClassyComputed'}}>Trivial Property access without ember-classy-computed</button></li>
-  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithClassyComputed'}}>Trivial Property access with ember-classy-computed</button></li>
-  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithClassyComputed'}}>Initial Render with ember-classy-computed</button></li>
-  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithComposableHelpers'}}>Initial Render with ember-composable-helpers</button></li>
-  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithClassyComputed'}}>Updates with ember-classy-computed</button></li>
-  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithComposableHelpers'}}>Updates with ember-composable-helpers</button></li>
-  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithClassyComputed'}}>Toggle filter property with ember-classy-computed</button></li>
-  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithComposableHelpers'}}>Toggle filter property with ember-composable-helpers</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithoutClassyComputed'}}>Ember's native CPs</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithClassyComputed'}}>ember-classy-computed</button></li>
+</ul>
+
+<h3>Initial render of a long list</h3>
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithClassyComputed'}}>ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithComposableHelpers'}}>ember-composable-helpers</button></li>
+</ul>
+
+<h3>Collection Element Updates</h3>
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithClassyComputed'}}>ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithComposableHelpers'}}>ember-composable-helpers</button></li>
+</ul>
+
+<h3>Observed Property Updates</h3>
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithClassyComputed'}}>ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithComposableHelpers'}}>ember-composable-helpers</button></li>
 </ul>
 
 {{#if isRunning}}
