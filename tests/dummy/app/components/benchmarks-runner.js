@@ -20,6 +20,8 @@ const User = EmberObject.extend({
   })
 });
 
+const ITERATIONS = 10;
+
 export default Ember.Component.extend(Evented, {
   filter: 'isActive',
 
@@ -28,6 +30,10 @@ export default Ember.Component.extend(Evented, {
   }),
 
   filteredUsers: filterBy('users', 'filter'),
+
+  iterations: computed(function() {
+    return ITERATIONS;
+  }),
 
   _reset() {
     this.set('result', null);
@@ -73,19 +79,37 @@ export default Ember.Component.extend(Evented, {
     this._reset();
     this.set('isRunning', true);
 
-    next(() => {
-      prepare().then((preparation) => {
+    let bench = (duration) => {
+      this._reset();
+      return prepare().then((preparation) => {
         let start = performance.now();
-        run(preparation).then(() => {
-          let duration = performance.now() - start;
-          let result = `${name}: ${duration}`;
+        return run(preparation).then(() => {
+          return duration + (performance.now() - start);
+        });
+      });
+    };
 
-          this.set('result', result);
-          this.setProperties({
-            isRunning: false,
-            renderClassyComputed: false,
-            renderComposableHelpers: false
-          });
+    let iteration = 1;
+    this.set('iteration', iteration);
+    next(() => {
+      let runs = A([]);
+      for (let i = 1; i < ITERATIONS; i++) {
+        runs.push(bench);
+      }
+
+      runs.reduce((acc, curr) => {
+        return acc.then((duration) => {
+          this.set('iteration', ++iteration);
+          return curr(duration);
+        })
+      }, bench(0)).then((totalDuration) => {
+        let result = `${name}: ${totalDuration / ITERATIONS}`;
+
+        this.set('result', result);
+        this.setProperties({
+          isRunning: false,
+          renderClassyComputed: false,
+          renderComposableHelpers: false
         });
       });
     });
