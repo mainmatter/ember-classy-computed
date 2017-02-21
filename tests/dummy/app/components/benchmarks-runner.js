@@ -4,13 +4,14 @@ import shout from '../computeds/shout';
 
 const {
   computed,
-  computed: { or },
+  computed: { or, filter },
   Object: EmberObject,
   A,
   run: { next },
   getOwner,
   Evented,
-  RSVP
+  RSVP,
+  defineProperty
 } = Ember;
 
 const User = EmberObject.extend({
@@ -33,6 +34,24 @@ export default Ember.Component.extend(Evented, {
 
   iterations: computed(function() {
     return ITERATIONS;
+  }),
+
+  nativeFilter: computed({
+    get() {
+      return this._nativeFilter;
+    },
+    set(_, value) {
+      this._nativeFilter = value;
+      if (value) {
+        let property = filter(`users.@each.${value}`, (item) => item.get(value));
+        defineProperty(this, 'nativeFilteredUsers', property);
+      } else {
+        let property = computed(() => []);
+        defineProperty(this, 'nativeFilteredUsers', property);
+      }
+      this.notifyPropertyChange('nativeFilteredUsers');
+      return value;
+    }
   }),
 
   _reset() {
@@ -62,13 +81,13 @@ export default Ember.Component.extend(Evented, {
     }
   },
 
-  _toggleFilterProperty(iterations, iteration = 0) {
+  _toggleFilterProperty(iterations, propertyName, iteration = 0) {
     let property = (iteration % 2 === 0) ? 'isBlocked' : 'isActive';
-    this.set('filter', property);
+    this.set(propertyName, property);
 
     if (iteration <= iterations) {
       next(() => {
-        this._toggleFilterProperty(iterations, ++iteration);
+        this._toggleFilterProperty(iterations, propertyName, ++iteration);
       });
     } else {
       this.trigger('_done');
@@ -109,7 +128,8 @@ export default Ember.Component.extend(Evented, {
         this.setProperties({
           isRunning: false,
           renderClassyComputed: false,
-          renderComposableHelpers: false
+          renderComposableHelpers: false,
+          renderNative: false
         });
       });
     });
@@ -164,6 +184,18 @@ export default Ember.Component.extend(Evented, {
       });
     },
 
+    runInitialRenderWithNative() {
+      this._runBenchmark('Initial render of 1000 users with native properties', () => {
+        this.set('renderNative', true);
+        this.set('nativeFilter', null);
+        this._fillUsers(1000);
+        return RSVP.resolve();
+      }, () => {
+        this.set('nativeFilter', 'isActive');
+        return new RSVP.Promise((resolve) => next(null, resolve));
+      });
+    },
+
     runUpdatesWithClassyComputed() {
       this._runBenchmark('Random updates of 100 users with ember-classy-computed', () => {
         this.set('renderClassyComputed', true);
@@ -190,6 +222,21 @@ export default Ember.Component.extend(Evented, {
       });
     },
 
+    runUpdatesWithNative() {
+      this._runBenchmark('Random updates of 100 users with native properties', () => {
+        this.set('renderNative', true);
+        this.set('nativeFilter', null);
+        this._fillUsers(100);
+        return RSVP.resolve();
+      }, () => {
+        return new RSVP.Promise((resolve) => {
+          this.set('nativeFilter', 'isActive');
+          this._updateUsers(100);
+          this.one('_done', resolve);
+        });
+      });
+    },
+
     runFilterPropertyToggleWithClassyComputed() {
       this._runBenchmark('Observed property updates for 100 users with ember-classy-computed', () => {
         this.set('renderClassyComputed', true);
@@ -197,7 +244,7 @@ export default Ember.Component.extend(Evented, {
         return RSVP.resolve();
       }, () => {
         return new RSVP.Promise((resolve) => {
-          this._toggleFilterProperty(100);
+          this._toggleFilterProperty(100, 'filter');
           this.one('_done', resolve);
         });
       });
@@ -210,7 +257,21 @@ export default Ember.Component.extend(Evented, {
         return RSVP.resolve();
       }, () => {
         return new RSVP.Promise((resolve) => {
-          this._toggleFilterProperty(100);
+          this._toggleFilterProperty(100, 'filter');
+          this.one('_done', resolve);
+        });
+      });
+    },
+
+    runFilterPropertyToggleWithNative() {
+      this._runBenchmark('Observed property updates for 100 users with nagive properties', () => {
+        this.set('renderNative', true);
+        this.set('nativeFilter', null);
+        this._fillUsers(100);
+        return RSVP.resolve();
+      }, () => {
+        return new RSVP.Promise((resolve) => {
+          this._toggleFilterProperty(100, 'nativeFilter');
           this.one('_done', resolve);
         });
       });
