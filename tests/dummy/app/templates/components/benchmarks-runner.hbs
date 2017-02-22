@@ -1,0 +1,74 @@
+<h1>Benchmarks</h1>
+
+<h3>Trivial Property Recomputations</h3>
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithoutClassyComputed'}}>Ember's native CPs</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runTrivialPropertyAccessWithClassyComputed'}}>ember-classy-computed</button></li>
+</ul>
+
+<h3>Initial render of a long list</h3>
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithClassyComputed'}}>ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithComposableHelpers'}}>ember-composable-helpers</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runInitialRenderWithNative'}}>native properties</button></li>
+</ul>
+
+<h3>Collection Element Updates</h3>
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithClassyComputed'}}>ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithComposableHelpers'}}>ember-composable-helpers</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runUpdatesWithNative'}}>native properties</button></li>
+</ul>
+
+<h3>Observed Property Updates</h3>
+<ul>
+  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithClassyComputed'}}>ember-classy-computed</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithComposableHelpers'}}>ember-composable-helpers</button></li>
+  <li><button disabled={{isRunning}} onclick={{action 'runFilterPropertyToggleWithNative'}}>native properties</button></li>
+</ul>
+
+{{#if isRunning}}
+  <p>Running iteration {{iteration}} of {{iterations}}</p>
+  {{loading-spinner}}
+{{/if}}
+
+{{#if result}}
+  <p style="color: red;">{{result}}</p>
+{{/if}}
+
+<hr/>
+
+<h2>Output</h2>
+<div class="output">
+  {{#if renderClassyComputed}}
+    <ul>
+      {{#each filteredUsers as |user|}}
+        <li>{{user.name}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+  
+  {{#if renderComposableHelpers}}
+    <ul>
+      {{#each (filter-by filter true users) as |user|}}
+        <li>{{user.name}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+
+  {{#if renderNative}}
+    <ul>
+      {{#each nativeFilteredUsers as |user|}}
+        <li>{{user.name}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</div>
+
+<style type="text/css" media="screen">
+.output {
+  opacity: .5;
+  zoom: 50%;
+  border: 1px solid black;
+}
+</style>

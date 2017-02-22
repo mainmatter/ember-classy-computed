@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import ClassBasedComputedProperty from 'ember-classy-computed';
 
-const { computed } = Ember;
+const ShoutComputed = ClassBasedComputedProperty.extend({
+  compute(string) {
+    return `${string}!!1!ELF!!`;
+  }
+});
 
-export default function(propertyName) {
-  return computed(propertyName, function() {
-    return `${this.get(propertyName).toUpperCase()}!!1!ELF!!`;
-  });
-}
+export default ClassBasedComputedProperty.property(ShoutComputed);
