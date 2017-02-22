@@ -120,7 +120,7 @@ the dynamic filter property changes.
 
 You might wonder whether this adds a huge performance overhead over regular
 computed properties. While this certainly introduces some overhead, our
-[benchmarks](https://github.com/simplabs/ember-classy-computed/blob/master/tests/dummy/app/components/benchmark-runner.js)
+[benchmarks](https://github.com/simplabs/ember-classy-computed/blob/master/tests/dummy/app/components/benchmarks-runner.js)
 show that for typical use cases, this overhead over functionally equivalent
 solutions is pretty much negligible.
 
