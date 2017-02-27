@@ -1,5 +1,8 @@
 # ember-classy-computed
 
+[![npm version](https://badge.fury.io/js/ember-classy-computed.svg)](https://badge.fury.io/js/ember-classy-computed)
+[![Build Status](https://travis-ci.org/simplabs/ember-classy-computed.svg?branch=master)](https://travis-ci.org/simplabs/ember-classy-computed)
+
 ember-classy-computed introduce a mechanism for __class based computed
 properties__ which essentially enables keeping state in computed properties
 (as opposed to normal computed properties which are stateless).
