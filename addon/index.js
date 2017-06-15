@@ -13,7 +13,7 @@ function findOrCreatePropertyInstance(propertyClass, context, key) {
   }
 
   let property = propertiesForContext[key];
-  if (property) {
+  if (property && property instanceof propertyClass) {
     return property;
   }
 
