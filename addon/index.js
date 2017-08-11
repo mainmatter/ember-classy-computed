@@ -1,7 +1,6 @@
 import Ember from 'ember';
-import WeakMap from 'ember-weakmap';
 
-const { Object: EmberObject, computed, A, isNone, getOwner } = Ember;
+const { Object: EmberObject, computed, A, isNone, getOwner, WeakMap } = Ember;
 
 const PROPERTIES = new WeakMap();
 
