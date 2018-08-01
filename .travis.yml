@@ -13,6 +13,12 @@ cache:
   directories:
     - $HOME/.npm
 
+branches:
+  only:
+  - master
+  # npm version tags
+  - /^v\d+\.\d+\.\d+$/
+
 env:
   global:
     # See https://git.io/vdao3 for details.
