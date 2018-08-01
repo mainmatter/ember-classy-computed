@@ -35,12 +35,8 @@ matrix:
 
 before_install:
   - npm config set spin false
-
-install:
-  - npm install
-
-script:
-  - npm test
+  - npm install -g npm@6
+  - npm --version
 
 deploy:
   provider: npm
@@ -57,3 +53,7 @@ notifications:
     rooms:
       secure: OOKD4ZksqzEBW/A3WRuOToODIxnDITqx+Esu7tdmmYPuQlMYgx4SUHv8j9OM9/ScFJiseeVGSkl45vJrHLLIITX9XSjO1RgiGZgw2heVujmGpF6CZNqvT6GsQuKIvMzmwF7IxuHdfV45Csr9Ou/Fg74TszR/4S2h4SOI4zhLg7A=
     on_success: never
+
+script:
+  - npm run lint:js
+  - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup
